@@ -1,0 +1,81 @@
+class Solution(object):
+    def numIslands(self, grid):
+        """
+        :type grid: List[List[str]]
+        :rtype: int
+        """
+        """
+        DFS
+        1. Check the whole grid rows and cols for dfs
+        2. Inside DFS, if it's out of bound or not land node, return difrectly
+        3. Otherwise, mark the node visisted, and perform further DFS on all 4 directions
+
+        BFS
+        1. Check the whole grid rows and cols for bfs
+        2. Set up queue and add 1st node to the queue, mark it visited
+        3. Walk the queue for bfs until it's empty
+           3.1 Pop out 1st node in the queue
+           3.2 Setup 4 directions
+           3.3 for each direction, if find new land node, mark it visit and add it back to the queue for further bfs
+        """
+
+        if not grid:
+            return 0
+        
+        ROWS = len(grid)
+        COLS = len(grid[0])
+        count = 0 
+
+        def dfs(r, c):
+            if (r < 0 or c < 0 or
+                r >= ROWS or c >= COLS or
+                grid[r][c] != "1"):
+                return
+            
+            grid[r][c] = "2"
+            dfs(r - 1, c)
+            dfs(r + 1, c)
+            dfs(r, c - 1)
+            dfs(r, c + 1)        
+            
+        
+        def bfs(r, c):
+            #2. Set up queue and add 1st node to the queue
+            q = collections.deque()
+            # Add 1st node to queue to start bfs search
+            q.append((r,c))
+            # Mark visited
+            grid[r][c] = "2"  
+            
+            #3. Walk the queue until the queue is empty
+            while q:   
+                #3.0 Pop out 1st node in the queue
+                row, col = q.popleft()
+
+                #3.1 Set up all 4 directions for bfs search
+                directions = [[1,0], [-1,0], [0,1], [0,-1]]
+                for dr, dc in directions:
+                    r = row + dr
+                    c = col + dc
+                    
+                    #3.2 If we find new land node, add it back to the queue for bfs and mark it visited
+                    if (r in range(ROWS) and
+                        c in range(COLS) and
+                        grid[r][c] == "1"):
+                        # Add to queue to continue bfs search
+                        q.append((r, c))
+                        # Mark visited
+                        grid[r][c] = "2"
+                                
+                            
+        #1. Check the whole grid to go over all the rows and columns
+        for i in range(ROWS):
+            for j in range(COLS):
+                if (grid[i][j] == '1'):
+                    dfs(i, j)
+                    #comment above dfs out and uncomment blow bfs for bfs approach
+                    #bfs(i, j)
+                    count += 1
+    
+        return count
+    
