@@ -1,0 +1,71 @@
+class Solution(object):
+    def shortestBridge(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        DFS
+            #1. return directly if it's out of bounds or not land node
+            #2. mark land node to be visited and add to the queue
+            #3. for all 4 directions, further DFS
+        BFS
+            #1. for each element in the queue, pop out element
+            #2. for all 4 directions, continue if out of bound or visted node, if we find another unvisited land node, return steps
+            #3. Mark visited and add to queue
+
+        """
+        N = len(grid)
+        directions = [[1,0], [-1, 0], [0, 1], [0, -1]]
+        q = collections.deque()
+
+        def dfs(grid, r, c, q):
+            #1. return directly if it's out of bounds or not land node
+            if (r < 0 or c < 0 or
+                r >= N or c >= N or
+                grid[r][c] != 1):
+                return
+            
+            #2. mark land node to be visited and add to the queue
+            grid[r][c] = 2
+            q.append((r, c))
+
+            #3. for all 4 directions, further DFS
+            dfs(grid, r - 1, c, q)
+            dfs(grid, r + 1, c, q)
+            dfs(grid, r, c - 1, q)
+            dfs(grid, r, c + 1, q)        
+                        
+    
+        def bfs(grid, r, c, q):
+            steps = 0
+
+            while q:
+                #1. for each element in the queue
+                for i in range(len(q)):
+                    r, c = q.popleft()
+                    
+                    #2. for all 4 directions, continue if out of bound or visted node
+                    for dr, dc in directions:
+                        curR, curC = r + dr, c + dc
+                        if (curR < 0 or curR >= N or curC < 0 or curC >= N or grid[curR][curC] == 2):
+                            continue
+                        # if we find another unvisited land node, return steps
+                        if grid[curR][curC] == 1:
+                            return steps
+
+                        # mark visited and add to queue
+                        grid[curR][curC] = 2
+                        q.append([curR, curC])
+                        
+                # initial queue is done, need add something        
+                steps += 1
+               
+            return -1
+        
+
+        for r in range(N):
+            for c in range(N):
+                if grid[r][c]:
+                    dfs(grid, r, c, q)
+                    return bfs(grid, r, c, q)
+                
+        return -1;
