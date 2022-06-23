@@ -1,62 +1,25 @@
-count = 5
-num = 12
-j = 2
-while(j < 5):
-    for i in range(j, 6):
-        if(num - (1 + i + j - 2) > i):
-            print(str(j - 1), str(i), str(num - (1+i)))
-            count += 1
-        else:
-            break
-    j += 1
+print('Welcome to Online IDE!! Happy Coding :)')
+def answer(n):
+    arr = [None]*(n+1)
+    for i in range(n+1):
+        arr[i] = [None]*(n+1)
+        for j in range(n+1):
+            arr[i][j] = 0
+    
+    arr[0][0] = 1
+    for i in range(1, n+1):
+        for j in range(n+1):
+            arr[i][j] = arr[i-1][j]
+            if j >= i:
+                arr[i][j] += arr[i-1][j-i]
+    return arr[n][n] - 1
 
-# for i in range(3, 6):
-#     if(num - (2 + i) > i):
-#         print("2", str(i), str(num - (1+i)))
-#         count += 1
-#     else:
-#         break
-
-# for i in range(4, 6):
-#     if(num - (3 + i) > i):
-#         print("3", str(i), str(num - (1+i)))
-#         count += 1
-#     else:
-#         break
-
-print(count)
-
-'''
-
-count = 5
-num = 12
-j = 2
-# only consider 3 colums for now, 5 and 6 are hard coded for now
-while(j < 5):
-    for i in range(j, 6):
-        if(num - (1 + i + j - 2) > i):
-            print(str(j - 1), str(i), str(num - (1+i)))
-            count += 1
-        else:
-            break
-    j += 1
-
-# now consider 4 columns
-x = 3
-while(x < 5):
-    for i in range(x, 6):
-        if(num - (x + i) > i):
-            print("1", "2", str(i), str(num - (x+i)))
-            count += 1
-        else:
-            break
-    x += 1
-    # for i in range(4, 6):
-    #     if(num - (4 + i) > i):
-    #         print("2", "3", str(i), str(num - (4+i)))
-    #         count += 1
-    #     else:
-    #         break
-
-print(count)
-'''
+if __name__ == '__main__':
+    # This prints out the results of this function on any value between (including) 3 and 200.
+    # It's just for debugging.
+    print("Format:\n Number of Bricks --> Distinct Partitions")
+    for bricks in range(3, 15):
+        print('   ', bricks, " --> ", str(answer(bricks)))
+        
+#        print(solution(3))
+#        print(solution(n2))
